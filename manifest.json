@@ -3,20 +3,15 @@
   "version": "1.0",
   "description": "Show stars and last update next to repo links.",
   "permissions": ["activeTab", "declarativeContent", "storage"],
+  "host_permissions": ["http://*/*", "https://*/*"],
   "options_page": "options.html",
   "content_scripts": [
     {
-      "js": [
-        "github-stars.js"
-      ],
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ]
+      "js": ["github-stars.js"],
+      "matches": ["http://*/*", "https://*/*"]
     }
   ],
-  "page_action": {
-    "default_popup": "popup.html",
+  "action": {
     "default_icon": {
       "16": "images/github-star16.png",
       "32": "images/github-star32.png",
@@ -30,5 +25,5 @@
     "48": "images/github-star48.png",
     "128": "images/github-star128.png"
   },
-  "manifest_version": 2
+  "manifest_version": 3
 }
