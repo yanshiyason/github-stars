@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Github Stars</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 10px;
+        background-color: #0d1117;
+        color: #c9d1d9;
+        min-width: 500px;
+      }
+      .repo-list {
+        list-style-type: none;
+        padding: 0;
+      }
+      .repo-list li {
+        margin-bottom: 10px;
+      }
+      .repo-list a {
+        color: #4493f8;
+        text-decoration: none;
+        padding: 5px 0;
+        display: inline-block;
+      }
+      .repo-list a:hover {
+        text-decoration: underline;
+      }
+      .repo-list img {
+        filter: invert(48%) sepia(100%) saturate(748%) hue-rotate(176deg)
+          brightness(96%) contrast(101%);
+        margin-left: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Top repositories</h1>
+    <ul class="repo-list" id="repoList">
+      <li>Loading...</li>
+    </ul>
+    <script src="popup.js"></script>
+  </body>
+</html>
