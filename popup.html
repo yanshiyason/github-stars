@@ -9,22 +9,30 @@
         background-color: #0d1117;
         color: #c9d1d9;
         min-width: 500px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+          Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      }
+      a {
+        font-size: 16px;
+        height: auto;
+        line-height: 24px;
+        list-style-type: disc;
+        overflow-wrap: break-word;
+        text-align: left;
+        text-decoration-color: rgb(68, 147, 248);
+        text-decoration-line: underline;
+        text-decoration-style: solid;
+        text-decoration-thickness: auto;
+        text-size-adjust: 100%;
+        text-underline-offset: 3.2px;
+        color: #4493f8;
       }
       .repo-list {
-        list-style-type: none;
-        padding: 0;
+        padding: 0px 12px;
+        list-style-type: disc;
       }
       .repo-list li {
-        margin-bottom: 10px;
-      }
-      .repo-list a {
-        color: #4493f8;
-        text-decoration: none;
-        padding: 5px 0;
-        display: inline-block;
-      }
-      .repo-list a:hover {
-        text-decoration: underline;
+        margin: 6px 0;
       }
       .repo-list img {
         filter: invert(48%) sepia(100%) saturate(748%) hue-rotate(176deg)
@@ -38,6 +46,7 @@
     <ul class="repo-list" id="repoList">
       <li>Loading...</li>
     </ul>
+    <script src="github-stars.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>

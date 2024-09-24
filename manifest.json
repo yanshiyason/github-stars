@@ -7,8 +7,8 @@
   "options_page": "options.html",
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["content.js"]
+      "matches": ["<all_urls>"],
+      "js": ["github-stars.js", "content.js"]
     }
   ],
   "action": {
@@ -25,6 +25,9 @@
     "32": "images/github-star32.png",
     "48": "images/github-star48.png",
     "128": "images/github-star128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
   },
   "manifest_version": 3
 }

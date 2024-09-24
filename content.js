@@ -1,15 +1,35 @@
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "getGithubLinks") {
-    const links = document.querySelectorAll('a[href*="github.com/"]');
-    const repoSet = new Set();
+chrome.runtime.sendMessage({ action: "contentScriptLoaded" });
 
-    links.forEach(link => {
-      const match = link.href.match(/github\.com\/([^\/]+\/[^\/]+)/);
-      if (match) {
-        repoSet.add(match[1]);
+chrome.storage.local.get(["githubToken"], function (result) {
+  const aTags = document.querySelectorAll("a[href*='github.com/']");
+  const starCounts = [];
+  let responses = 0;
+  for (let i = 0; i < aTags.length; i++) {
+    displayCachedOrRemoteGithubStars(
+      aTags[i].href,
+      result.githubToken,
+      stargazersCount => {
+        responses++;
+        if (stargazersCount === "NOT_A_REPO") {
+          return;
+        }
+
+        if (typeof stargazersCount !== "number") {
+          return;
+        }
+
+
+        aTags[i].innerHTML = `${aTags[i].innerHTML} [${GITHUB_STAR_MARK}${stargazersCount}]`;
+
+        starCounts.push({ repo: aTags[i].href, stargazersCount });
+
+        if (responses === aTags.length - 1) {
+          chrome.runtime.sendMessage({
+            action: "storeStarCounts",
+            starCounts,
+          });
+        }
       }
-    });
-
-    sendResponse({ repos: Array.from(repoSet) });
+    );
   }
 });
