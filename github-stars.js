@@ -28,13 +28,51 @@ const saveToCache = function (url, stargazersCount) {
   });
 };
 
+const requestQueue = [];
+let isProcessing = false;
+const BATCH_SIZE = 50; // Number of requests to process at a time
+
+const processQueue = () => {
+  if (requestQueue.length === 0) {
+    isProcessing = false; // Reset processing flag when the queue is empty
+    return; // Exit if there's nothing to process
+  }
+
+  isProcessing = true; // Set processing flag
+  const batch = requestQueue.splice(0, BATCH_SIZE); // Get the next batch of requests
+
+  // Process each request in the batch
+  const promises = batch.map(({ url, token, onStargazersCount }) =>
+    fetchGithubStars(url, token, onStargazersCount)
+  );
+
+  // Wait for all promises in the batch to resolve
+  Promise.all(promises)
+    .then(() => {
+      setTimeout(processQueue, 500); // Delay before processing the next batch
+    })
+    .catch(() => {
+      setTimeout(processQueue, 500); // Delay even on error
+    });
+};
+
+const queueFetchGithubStars = function (url, token, onStargazersCount) {
+  requestQueue.push({ url, token, onStargazersCount });
+  checkQueue(); // Check the queue to start processing if needed
+};
+
+const checkQueue = () => {
+  if (requestQueue.length > 0 && !isProcessing) {
+    processQueue(); // Start processing if there are items in the queue
+  }
+};
+
 const fetchGithubStars = function (url, token, onStargazersCount) {
   const [_, { user, repo }] = extractRepoFromUrl(url);
   const apiUrl = `https://api.github.com/repos/${user}/${repo}`;
 
   const headers = {};
   if (token) {
-    console.debug("github token found, setting auth header");
     headers["Authorization"] = `token ${token}`;
   }
 
@@ -81,7 +119,7 @@ const displayCachedOrRemoteGithubStars = function (
   chrome.storage.local.get(url, (result) => {
     const cached = result[url];
     if (!cached) {
-      fetchGithubStars(url, token, onStargazersCount);
+      queueFetchGithubStars(url, token, onStargazersCount);
       return;
     }
 
@@ -93,7 +131,7 @@ const displayCachedOrRemoteGithubStars = function (
     }
 
     if (isExpired || cached.stargazersCount === undefined) {
-      fetchGithubStars(url, token, onStargazersCount);
+      queueFetchGithubStars(url, token, onStargazersCount);
     } else {
       onStargazersCount(cached.stargazersCount);
     }
