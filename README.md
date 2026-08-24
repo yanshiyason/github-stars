@@ -1,3 +1,5 @@
+
+
 # github-stars
 
 Chrome extension that appends github stars to repo links.
@@ -8,7 +10,7 @@ Chrome extension that appends github stars to repo links.
 
 2. Right click on the extension's icon and select "options"
 
-3. Input your github token and close the options page
+3. Input your github token, close the options page, and refresh the page
 
 4. Links will be displayed with stars
 
